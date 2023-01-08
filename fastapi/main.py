@@ -10,6 +10,7 @@ from core import config
 from core.logger import LOGGING
 from db import kafka
 
+
 app = FastAPI(
     title=config.PROJECT_NAME,
     docs_url='/api/openapi',
@@ -21,15 +22,12 @@ app = FastAPI(
 @app.on_event('startup')
 async def startup():
     kafka.producer = aiokafka.AIOKafkaProducer(bootstrap_servers=f'{config.KAFKA_HOST}:{config.KAFKA_PORT}')
-    # kafka.consumer = aiokafka.AIOKafkaConsumer(bootstrap_servers=f'{config.KAFKA_HOST}:{config.KAFKA_PORT}')
     await kafka.producer.start()
-    # await kafka.consumer.start()
 
 
 @app.on_event('shutdown')
 async def shutdown():
     await kafka.producer.stop()
-    # await kafka.consumer.stop()
 
 
 app.include_router(views.router, prefix='/api/v1/views', tags=['views'])
