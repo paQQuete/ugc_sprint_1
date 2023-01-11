@@ -21,7 +21,7 @@ app = FastAPI(
 
 @app.on_event('startup')
 async def startup():
-    kafka.producer = aiokafka.AIOKafkaProducer(bootstrap_servers=f'{config.KAFKA_HOST}:{config.KAFKA_PORT}')
+    kafka.producer = aiokafka.AIOKafkaProducer(bootstrap_servers=config.KAFKA_SERVER)
     await kafka.producer.start()
 
 
