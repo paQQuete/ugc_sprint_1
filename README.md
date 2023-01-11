@@ -5,3 +5,17 @@
 Распределение по командам подготовит команда сопровождения. Куратор поделится с вами списками в Slack в канале #group_projects.
 
 Задания на спринт вы найдёте внутри тем.
+
+Python 3.8
+
+```shell
+docker compose -f kafka.yml up
+```
+
+```shell
+docker compose -f clickhouse.yml up
+```
+
+```shell
+python3 clickhouse/initial.py
+```
