@@ -11,8 +11,12 @@ router = APIRouter()
 
 @router.post('/set', response_model=ViewProduce)
 async def set_view(view: ViewProduce, view_service: ViewService = Depends(get_view_service)):
-    await view_service.set(topic=view.topic, value=view.value.encode('UTF-8'), key=view.key.encode('UTF-8'))
-    return ViewProduce(topic=view.topic, value=view.value, key=view.key)
+    await view_service.set(
+        topic=view.topic,
+        key=view.user_id.encode('UTF-8'),
+        value=view.value.json().encode('UTF-8')
+    )
+    return ViewProduce(topic=view.topic, value=view.value, user_id=view.user_id)
 
 
 @router.get('/get', response_model=ViewConsume)
