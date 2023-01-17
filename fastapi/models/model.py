@@ -14,6 +14,8 @@ class ViewValue(BaseModel):
     movie_timestamp: int
     event_timestamp: int
     movie_id: UUID
+    user_id: str
+
 
     class Config:
         json_loads = orjson.loads
@@ -22,7 +24,6 @@ class ViewValue(BaseModel):
 
 class ViewProduce(BaseModel):
     topic: str
-    user_id: str
     value: ViewValue
 
     class Config:

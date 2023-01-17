@@ -1,4 +1,5 @@
 import os
+import random
 from pathlib import Path
 
 from clickhouse_driver import Client
@@ -14,27 +15,25 @@ client = Client(host=os.getenv('CLICKHOUSE_HOST'))
 client.execute(f"""
     CREATE TABLE IF NOT EXISTS default.views_queue ON CLUSTER company_cluster
 (
-  id     Int64,
-  key            Int64,
+  user_id           String,
   movie_id          UUID,
   movie_timestamp timestamp,
   event_timestamp timestamp
 )
-ENGINE=Kafka('broker:29092', 'views', 'views_group2', 'JSONEachRow')
+ENGINE=Kafka('broker:29092', 'views', 'views_group{random.randint(1,256)}', 'JSONEachRow')
 settings kafka_thread_per_consumer = 0, kafka_num_consumers = 1;
 """)
 
 client.execute(f"""
     CREATE TABLE default.views ON CLUSTER company_cluster
 (
-  id     Int64,
-  key            Int64,
+  user_id           String,
   movie_id          UUID,
   movie_timestamp timestamp,
   event_timestamp timestamp
 )
 Engine=ReplacingMergeTree()
-ORDER BY (id, key, movie_id)
+ORDER BY (user_id)
 PARTITION BY (movie_id);
 """)
 
