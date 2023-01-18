@@ -54,7 +54,3 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
-networks:
-  clickhouse-network:
-    driver: bridge
-    external: false

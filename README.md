@@ -9,13 +9,13 @@
 Python 3.8
 
 ```shell
-docker compose -f kafka.yml up
-```
-
-```shell
-docker compose -f clickhouse.yml up
+docker compose -f docker-compose.yml up
 ```
 
 ```shell
 python3 clickhouse/initial.py
+```
+
+```shell
+python3 etl/process.py
 ```
