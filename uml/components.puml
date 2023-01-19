@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+cloud {
+[Frontend]
+}
+
+package "Admin panel" {
+  skinparam actorStyle awesome
+ :Content moderator: --> [Nginx]
+[Nginx] - [Django]
+database "PostgreSQL" {
+    [Films metadata]
+}
+}
+
+
+
+[Django] --> [Films metadata]
+
+skinparam actorStyle awesome
+    :Users: --> [Frontend]
+    [Frontend] - [Nginx']
+
+package "Search" {
+        [ETL]
+[Films metadata] --> [ETL]
+    database "Elasticsearch" {
+        [Films metadata']
+    }
+    [ETL] --> [Films metadata']
+
+
+    [Nginx'] - [FastAPI]
+    [FastAPI] - [Redis cluster]
+    [FastAPI] - [Films metadata']
+
+}
+
+package "Auth" {
+    [Flask]
+    [Redis]
+    database "PostgreSQL'" {
+    [User reg info, roles, permissions]
+    }
+    [Nginx'] - [Flask]
+    [Flask] - [Redis]
+    [Flask] - [User reg info, roles, permissions]
+
+}
+
+package "UGC" {
+    [FastAPI']
+    database "Kafka"
+    database "Clickhouse"
+
+    skinparam actorStyle awesome
+    :Analyst: --> "Clickhouse"
+
+    [Frontend] - [FastAPI']
+    [FastAPI'] - "Kafka" : Produce
+    "Clickhouse" - "Kafka" : Consume
+
+
+}
+
+
+@enduml
+
