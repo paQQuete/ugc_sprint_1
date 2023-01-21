@@ -13,7 +13,7 @@ skinparam component {
   ArrowFontColor #777777
 }
 skinparam databaseBackgroundColor Aqua
-
+skinparam actorStyle awesome
 
 cloud {
 [Frontend]
@@ -21,7 +21,7 @@ cloud {
 
 package "Admin panel" {
     [Django] #Yellow
-    skinparam actorStyle awesome
+
     :Content moderator: --> [Nginx]
     [Nginx] - [Django]
     database "PostgreSQL" {
@@ -78,7 +78,6 @@ package "UGC" {
     }
     database "Clickhouse"
 
-    skinparam actorStyle awesome
     :Analyst: --> "Clickhouse"
 
 
