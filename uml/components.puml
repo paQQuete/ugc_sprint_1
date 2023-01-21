@@ -1,0 +1,96 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+
+skinparam component {
+  FontSize 15
+  BackgroundColor<<Apache>> Pink
+  BorderColor<<Apache>> #FF6655
+  FontName Courier
+  BorderColor black
+  BackgroundColor gold
+  ArrowFontName Courier
+  ArrowColor #FF6655
+  ArrowFontColor #777777
+}
+skinparam databaseBackgroundColor Aqua
+skinparam actorStyle awesome
+
+cloud {
+[Frontend]
+}
+
+package "Admin panel" {
+    [Django] #Yellow
+
+    :Content moderator: --> [Nginx]
+    [Nginx] - [Django]
+    database "PostgreSQL" {
+        [Films metadata]
+    }
+    [Django] <..> [Films metadata]
+}
+
+[ETL]
+
+
+
+skinparam actorStyle awesome
+    :Users: --> [Frontend]
+    [Frontend] - [Nginx']
+
+package "Search" {
+    [FastAPI] #Yellow
+    note right of [ETL]
+    persistent
+    end note
+
+    [Films metadata] ..> [ETL]
+    database "Elasticsearch" {
+        [Films metadata']
+    }
+    [ETL] ..> [Films metadata']
+
+
+
+    [FastAPI] <..> [Redis cluster]
+    [FastAPI] <..> [Films metadata']
+
+}
+
+package "Auth" {
+    [Flask] #Yellow
+    [Redis]
+    database "PostgreSQL'" {
+    [User reg info, roles, permissions]
+    }
+    [Nginx'] - [Flask]
+    [Flask] <..> [Redis] : invalid JWT
+    [Flask] <..> [User reg info, roles, permissions]
+    note right of [Redis]
+    invalid JWT store
+    end note
+}
+
+package "UGC" {
+    [FastAPI'] #Yellow
+    database "Kafka" {
+        [views]
+    }
+    database "Clickhouse"
+
+    :Analyst: --> "Clickhouse"
+
+
+    [FastAPI'] ..> [views] : Produce
+    "Clickhouse" <.. [views] : Consume
+
+
+}
+
+[Nginx'] - [FastAPI]
+[Nginx'] - [FastAPI']
+
+
+@enduml
+
