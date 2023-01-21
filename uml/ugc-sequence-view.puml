@@ -1,0 +1,74 @@
+@startuml
+'https://plantuml.com/object-diagram
+!theme plain
+
+actor Frontend as front
+
+box "FastAPI" #LightBlue
+control APIendpoint as api
+participant ServiceLayer as service
+participant AioKafka as aiokafka
+end box
+
+box "Kafka" #LightYellow
+database KafkaTopic as kafka
+end box
+
+box "Clickhouse" #Gold
+queue KafkaTableEngine as table_q
+queue MaterializedView as materialized
+database DBTable as table_v
+end box
+
+actor Analyst as analyst
+
+
+activate kafka
+activate api
+activate table_q
+activate materialized
+activate front
+activate table_v
+
+
+
+front ->o api: HTTP Request
+note over front, api: {movie, user ids, pause timestamp}
+hnote over front: idle
+activate front #DarkSalmon
+
+api -> service
+activate service
+
+service -> aiokafka: set(**)
+activate aiokafka
+
+
+aiokafka ->o kafka: produce(**)
+
+kafka o--> aiokafka
+deactivate aiokafka
+
+aiokafka --> service
+deactivate service
+
+service -->o front: HTTP Response
+deactivate front
+note over service, front: {movie, user ids, pause timestamp}
+hnote over front: release
+
+table_q ->o kafka: consume
+
+kafka o--> table_q: data
+
+table_q <- materialized
+table_q --> materialized
+materialized -> materialized: deserialize, aggregate
+
+materialized -> table_v
+
+analyst ->o table_v: through DBMS
+table_v o--> analyst
+note over analyst, table_v: SQL query
+
+@enduml
