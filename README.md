@@ -13,7 +13,7 @@ docker compose -f docker-compose.yml up
 ```
 
 ```shell
-uvicorn main:app --host 0.0.0.0 --port 8000`
+cd fastapi && uvicorn main:app --host 0.0.0.0 --port 8000`
 ```
 
 
