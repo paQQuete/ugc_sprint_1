@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from models.model import ViewProduce, ViewConsume, RequestConsume
+from models.model import ViewProduce
 from services.getset_kafka import ViewService, get_view_service
 
 

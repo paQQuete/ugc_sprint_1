@@ -1,0 +1,15 @@
+FROM python:3.8-slim
+
+ENV PYTHONUNBUFFERED 1
+WORKDIR /opt/fastapi/src
+COPY . ./
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+RUN apt -y update \
+    && apt -y install netcat
+
+EXPOSE 8000
+RUN chmod 777 /opt/fastapi/src/entrypoint.sh
+ENTRYPOINT ["/opt/fastapi/src/entrypoint.sh"]
+
