@@ -21,6 +21,7 @@ services:
     ports:
       - "9092:9092"
       - "9101:9101"
+      - "29092"
     networks:
       - clickhouse-network
     environment:
@@ -246,6 +247,19 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+  fastapi:
+      build: ./fastapi
+      container_name: ugc_service
+      hostname: ugc
+      depends_on:
+        - zookeeper-kafka
+        - zookeeper
+      env_file:
+        - .env
+      ports:
+        - "8000:8000"
+      networks:
+        - clickhouse-network
 networks:
   clickhouse-network:
     driver: bridge
