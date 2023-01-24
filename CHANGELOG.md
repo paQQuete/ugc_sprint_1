@@ -1,0 +1,18 @@
+- CHANGELOG.md added
+- docker-compose.yml closed ports as much as possible
+- style fix
+- DB Research done
+- added start.sh script for initial launch
+- FastAPI build and running through Docker container
+- style fix
+- Update README.md
+- ugc seq diagram done
+- object diagram done
+- ETL done
+- docker-compose.yml
+- fix .env.example
+- fix requirements.txt
+- clickhouse compose and config added
+- Remove consumer logic from FastAPI
+- API for produce messages to Kafka done
+- Initial commit
