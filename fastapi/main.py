@@ -12,7 +12,7 @@ from db import kafka
 
 
 app = FastAPI(
-    title=config.PROJECT_NAME,
+    title=config.Settings().PROJECT_NAME,
     docs_url='/api/openapi',
     openapi_url='/api/openapi.json',
     default_response_class=ORJSONResponse,
@@ -21,7 +21,7 @@ app = FastAPI(
 
 @app.on_event('startup')
 async def startup():
-    kafka.producer = aiokafka.AIOKafkaProducer(bootstrap_servers=config.KAFKA_SERVER)
+    kafka.producer = aiokafka.AIOKafkaProducer(bootstrap_servers=config.Settings().KAFKA_SERVER)
     await kafka.producer.start()
 
 
