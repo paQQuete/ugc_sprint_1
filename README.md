@@ -3,8 +3,6 @@
 ссылка на репозиторий https://github.com/paQQuete/ugc_sprint_1
 участники @paqquete, @alexbravada, @npocbet
 
-**Python 3.8**
-
 Запуск проекта (Kafka, Clickhouse, FastAPI)
 ```shell
 docker compose up
