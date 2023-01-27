@@ -1,3 +1,4 @@
+import uuid
 from uuid import UUID
 
 import orjson
@@ -14,6 +15,16 @@ class BaseOrjsonModel(BaseModel):
         json_dumps = orjson_dumps
 
 
+class BaseTimestampModel(BaseOrjsonModel):
+    created_at: int
+    updated_at: int
+
+
+class BaseLikesModel(BaseTimestampModel):
+    rating: int
+    user_id: int
+
+
 class ViewValue(BaseOrjsonModel):
     movie_timestamp: int
     event_timestamp: int
@@ -24,3 +35,38 @@ class ViewValue(BaseOrjsonModel):
 class ViewProduce(BaseOrjsonModel):
     topic: str
     value: ViewValue
+
+
+class MovieLikesValue(BaseLikesModel):
+    movie_uuid: uuid.UUID
+
+
+class MovieLikesProduce(BaseOrjsonModel):
+    topic: str
+    value: MovieLikesValue
+
+
+class ReviewLikesValue(BaseLikesModel):
+    review_uuid: uuid.UUID
+
+
+class ReviewLikesProduce(BaseOrjsonModel):
+    topic: str
+    value: ReviewLikesValue
+
+
+class ReviewValue(BaseTimestampModel):
+    user_id: int
+    movie_uuid: uuid.UUID
+    title: str
+    text: str
+
+
+class ReviewProduce(BaseOrjsonModel):
+    topic: str
+    value: ReviewValue
+
+
+class BookmarksValue(BaseTimestampModel):
+    user_id: int
+    movie_uuid: uuid.UUID
