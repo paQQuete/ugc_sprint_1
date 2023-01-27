@@ -70,3 +70,8 @@ class ReviewProduce(BaseOrjsonModel):
 class BookmarksValue(BaseTimestampModel):
     user_id: int
     movie_uuid: uuid.UUID
+
+
+class BookmarksProduce(BaseOrjsonModel):
+    topic: str
+    value: BookmarksValue
