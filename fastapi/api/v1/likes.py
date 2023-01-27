@@ -7,7 +7,7 @@ from services.getset_kafka import KafkaService, get_kafka_service
 router = APIRouter()
 
 
-@router.post('/movie_set', response_model=MovieLikesProduce)
+@router.post('/movie/set', response_model=MovieLikesProduce)
 async def set_movie(view: MovieLikesProduce, kafka_service: KafkaService = Depends(get_kafka_service)):
     await kafka_service.set(
         topic=view.topic,
@@ -17,7 +17,7 @@ async def set_movie(view: MovieLikesProduce, kafka_service: KafkaService = Depen
     return MovieLikesProduce(topic=view.topic, value=view.value)
 
 
-@router.post('/review_set', response_model=ReviewLikesProduce)
+@router.post('/review/set', response_model=ReviewLikesProduce)
 async def set_movie(view: ReviewLikesProduce, kafka_service: KafkaService = Depends(get_kafka_service)):
     await kafka_service.set(
         topic=view.topic,

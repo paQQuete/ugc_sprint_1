@@ -13,7 +13,9 @@ logging_config.dictConfig(LOGGING)
 class Settings(BaseSettings):
     PROJECT_NAME = os.getenv('PROJECT_NAME')
     KAFKA_HOST = os.getenv('KAFKABROKER_HOST')
+    # KAFKA_HOST = os.getenv('KAFKA_HOST')
     KAFKA_PORT = int(os.getenv('KAFKABROKER_PORT'))
+    # KAFKA_PORT = int(os.getenv('KAFKA_PORT'))
     KAFKA_SERVER = f'{KAFKA_HOST}:{KAFKA_PORT}'
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

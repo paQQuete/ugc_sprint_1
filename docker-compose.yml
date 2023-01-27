@@ -260,6 +260,17 @@ services:
         - "8000:8000"
       networks:
         - clickhouse-network
+  testing_c:
+      image: praqma/network-multitool:latest
+      container_name: testing_c
+      hostname: testing_c
+      depends_on:
+        - zookeeper-kafka
+      ports:
+        - "60000:80"
+      networks:
+        - clickhouse-network
+
 networks:
   clickhouse-network:
     driver: bridge
