@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends
 
 from models.model import ViewProduce
-from services.getset_kafka import ViewService, get_view_service
+from services.getset_kafka import KafkaService, get_view_service
 
 
 router = APIRouter()
 
 
 @router.post('/set', response_model=ViewProduce)
-async def set_view(view: ViewProduce, view_service: ViewService = Depends(get_view_service)):
+async def set_view(view: ViewProduce, view_service: KafkaService = Depends(get_view_service)):
     await view_service.set(
         topic=view.topic,
         key=str(view.value.user_id).encode('UTF-8'),
