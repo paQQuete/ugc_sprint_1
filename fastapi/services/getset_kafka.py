@@ -15,7 +15,7 @@ class KafkaService:
 
 
 @lru_cache()
-def get_view_service(
+def get_kafka_service(
         producer: AIOKafkaProducer = Depends(get_producer)
 ) -> KafkaService:
     return KafkaService(producer)
