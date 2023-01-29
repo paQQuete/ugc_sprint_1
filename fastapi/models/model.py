@@ -1,5 +1,4 @@
 import uuid
-from uuid import UUID
 
 import orjson
 from pydantic import BaseModel
@@ -28,12 +27,12 @@ class BaseLikesModel(BaseTimestampModel):
 class ViewValue(BaseOrjsonModel):
     movie_timestamp: int
     event_timestamp: int
-    movie_id: UUID
-    user_id: str
+    movie_id: uuid.UUID
+    user_id: int
 
 
 class ViewProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'views'
     value: ViewValue
 
 
@@ -42,7 +41,7 @@ class MovieLikesValue(BaseLikesModel):
 
 
 class MovieLikesProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'movie_likes'
     value: MovieLikesValue
 
 
@@ -51,7 +50,7 @@ class ReviewLikesValue(BaseLikesModel):
 
 
 class ReviewLikesProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'review_likes'
     value: ReviewLikesValue
 
 
@@ -63,7 +62,7 @@ class ReviewValue(BaseTimestampModel):
 
 
 class ReviewProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'reviews'
     value: ReviewValue
 
 
@@ -73,5 +72,5 @@ class BookmarksValue(BaseTimestampModel):
 
 
 class BookmarksProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'bookmarks'
     value: BookmarksValue
