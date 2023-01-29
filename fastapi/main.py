@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from api.v1 import views
+from api.v1 import views, bookmarks, likes, reviews
 from core import config
 from core.logger import LOGGING
 from db import kafka
@@ -31,6 +31,9 @@ async def shutdown():
 
 
 app.include_router(views.router, prefix='/api/v1/views', tags=['views'])
+app.include_router(bookmarks.router, prefix='/api/v1/bookmarks', tags=['bookmarks'])
+app.include_router(likes.router, prefix='/api/v1/likes', tags=['likes'])
+app.include_router(reviews.router, prefix='/api/v1/reviews', tags=['reviews'])
 
 if __name__ == '__main__':
     # Приложение может запускаться командой

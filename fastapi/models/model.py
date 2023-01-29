@@ -1,4 +1,4 @@
-from uuid import UUID
+import uuid
 
 import orjson
 from pydantic import BaseModel
@@ -14,13 +14,63 @@ class BaseOrjsonModel(BaseModel):
         json_dumps = orjson_dumps
 
 
+class BaseTimestampModel(BaseOrjsonModel):
+    created_at: int
+    updated_at: int
+
+
+class BaseLikesModel(BaseTimestampModel):
+    rating: int
+    user_id: int
+
+
 class ViewValue(BaseOrjsonModel):
     movie_timestamp: int
     event_timestamp: int
-    movie_id: UUID
-    user_id: str
+    movie_id: uuid.UUID
+    user_id: int
 
 
 class ViewProduce(BaseOrjsonModel):
-    topic: str
+    topic: str = 'views'
     value: ViewValue
+
+
+class MovieLikesValue(BaseLikesModel):
+    movie_uuid: uuid.UUID
+
+
+class MovieLikesProduce(BaseOrjsonModel):
+    topic: str = 'movie_likes'
+    value: MovieLikesValue
+
+
+class ReviewLikesValue(BaseLikesModel):
+    review_uuid: uuid.UUID
+
+
+class ReviewLikesProduce(BaseOrjsonModel):
+    topic: str = 'review_likes'
+    value: ReviewLikesValue
+
+
+class ReviewValue(BaseTimestampModel):
+    user_id: int
+    movie_uuid: uuid.UUID
+    title: str
+    text: str
+
+
+class ReviewProduce(BaseOrjsonModel):
+    topic: str = 'reviews'
+    value: ReviewValue
+
+
+class BookmarksValue(BaseTimestampModel):
+    user_id: int
+    movie_uuid: uuid.UUID
+
+
+class BookmarksProduce(BaseOrjsonModel):
+    topic: str = 'bookmarks'
+    value: BookmarksValue
