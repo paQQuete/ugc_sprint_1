@@ -14,7 +14,7 @@ docker compose up
  
 После, нужно запустить файл с запросами к clickhouse для подписки на топик Kafka и представления полученных сообщений в таблицу 'views' в БД 
 ```shell
-python3 etl/process.py
+python3 etl/clickhouse.py
 ```
 
 **Запуск с помощью bash скрипта**
