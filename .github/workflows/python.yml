@@ -36,3 +36,7 @@ jobs:
 #    - name: Test with pytest
 #      run: |
 #        pytest tests/unit
+
+    - name: Type check with mypy
+      run:
+        mypy ./fastapi --explicit-package-bases
