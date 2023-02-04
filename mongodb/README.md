@@ -8,5 +8,5 @@ docker compose up
 
 initial database
 ```shell
-./mongodb/config/initial.sh
+./mongodb/config/initial_db.sh
 ```

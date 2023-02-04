@@ -60,14 +60,14 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   connect:
-    image: cnfldemos/cp-server-connect-datagen:0.4.0-6.0.1
+    image: confluentinc/cp-kafka-connect:6.0.1
     hostname: connect
     container_name: connect
     depends_on:
+      - zookeeper-kafka
       - broker
-      - schema-registry
     ports:
-      - "8083"
+      - "8083:8083"
     networks:
       - clickhouse-network
     environment:
@@ -82,15 +82,21 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # CLASSPATH required due to CC-2422
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-6.0.1.jar
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR,com.mongodb.kafka=DEBUG"
+      CONNECT_PLUGIN_PATH: /usr/share/confluent-hub-components
+      CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      # Assumes image is based on confluentinc/kafka-connect-datagen:latest which is pulling 5.2.2 Connect image
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.2.2.jar
       CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
-      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+    command: "bash -c 'if [ ! -d /usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen ]; then echo \"WARNING: Did not find directory for kafka-connect-datagen (did you remember to run: docker-compose up -d --build ?)\"; fi ; /etc/confluent/docker/run'"
+    volumes:
+      - ./mongodb/kafka-connect:/usr/share/confluent-hub-components/kafka-connect-mongodb
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:6.0.1
@@ -260,6 +266,144 @@ services:
         - "8000:8000"
       networks:
         - clickhouse-network
+
+  mongors1n1:
+    container_name: mongors1n1
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - "27017:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data1:/data/db
+    networks:
+      - clickhouse-network
+
+  mongors1n2:
+    container_name: mongors1n2
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - "27027:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data2:/data/db
+    networks:
+      - clickhouse-network
+
+  mongors1n3:
+    container_name: mongors1n3
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - "27037:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data3:/data/db
+    networks:
+      - clickhouse-network
+
+  mongors2n1:
+    container_name: mongors2n1
+    image: mongo
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    ports:
+      - "27047:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data4:/data/db
+    networks:
+      - clickhouse-network
+
+  mongors2n2:
+    container_name: mongors2n2
+    image: mongo
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    ports:
+      - "27057:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data5:/data/db
+    networks:
+      - clickhouse-network
+
+  mongors2n3:
+    container_name: mongors2n3
+    image: mongo
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    ports:
+      - "27067:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data6:/data/db
+    networks:
+      - clickhouse-network
+
+  mongocfg1:
+    container_name: mongocfg1
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    expose:
+      - "27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/config1:/data/db
+    networks:
+      - clickhouse-network
+
+  mongocfg2:
+    container_name: mongocfg2
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    expose:
+      - "27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/config2:/data/db
+    networks:
+      - clickhouse-network
+
+  mongocfg3:
+    container_name: mongocfg3
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    expose:
+      - "27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/config3:/data/db
+    networks:
+      - clickhouse-network
+
+
+  mongos1:
+    container_name: mongos1
+    image: mongo
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017
+    ports:
+      - "27019:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - clickhouse-network
+
+  mongos2:
+    container_name: mongos2
+    image: mongo
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017
+    ports:
+      - "27020:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - clickhouse-network
+
   testing_c:
       image: praqma/network-multitool:latest
       container_name: testing_c
@@ -267,9 +411,18 @@ services:
       depends_on:
         - zookeeper-kafka
       ports:
-        - "60000:80"
+        - "60000:60000"
       networks:
         - clickhouse-network
+
+  jupyter:
+    image: python:slim
+    container_name: jupyter
+    command: bash -c "pip install jupyter clickhouse-driver vertica-python pymongo mimesis && jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root"
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./db_research/volume:/home/user
 
 networks:
   clickhouse-network:

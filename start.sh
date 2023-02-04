@@ -5,7 +5,7 @@ fetchstatus() {
 #export $(grep -v '^#' .env | xargs)
 
 #up all services
-docker compose up -d --build
+docker compose -f docker-compose.full.yml up -d --build
 
 #wait for services alive
 status=$(fetchstatus)
@@ -19,25 +19,25 @@ echo "fastapi service is working, continue"
 
 #create Kafka topics
 docker exec zookeeper-kafka \
-  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic views
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcViews
 sleep 1
 
 docker exec zookeeper-kafka \
-  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic movie_likes
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcMovie_likes
 sleep 1
 
 docker exec zookeeper-kafka \
-  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic review_likes
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcReview_likes
 sleep 1
 
 docker exec zookeeper-kafka \
-  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic reviews
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcReviews
 sleep 1
 
 docker exec zookeeper-kafka \
-  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic bookmarks
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcBookmarks
 sleep 1
 
 #initialized database tables and engines
 python3 clickhouse/initial.py
-python3 etl/process.py
+python3 etl/clickhouse.py
