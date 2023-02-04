@@ -7,3 +7,4 @@ uvloop==0.14.0
 python-dotenv==0.21.0
 aiokafka==0.8.0
 clickhouse-driver==0.2.5
+mypy==0.991
