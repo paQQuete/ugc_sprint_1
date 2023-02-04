@@ -29,11 +29,11 @@ class ViewValue(BaseOrjsonModel):
     movie_timestamp: int
     event_timestamp: int
     movie_id: uuid.UUID
-    user_id: Union[str, int]
+    user_id: int
 
 
 class ViewProduce(BaseOrjsonModel):
-    topic: str = 'ugc.views'
+    topic: str = 'ugcViews'
     value: ViewValue
 
 
@@ -42,7 +42,7 @@ class MovieLikesValue(BaseLikesModel):
 
 
 class MovieLikesProduce(BaseOrjsonModel):
-    topic: str = 'ugc.movie_likes'
+    topic: str = 'ugcMovie_likes'
     value: MovieLikesValue
 
 
@@ -51,7 +51,7 @@ class ReviewLikesValue(BaseLikesModel):
 
 
 class ReviewLikesProduce(BaseOrjsonModel):
-    topic: str = 'ugc.review_likes'
+    topic: str = 'ugcReview_likes'
     value: ReviewLikesValue
 
 
@@ -63,7 +63,7 @@ class ReviewValue(BaseTimestampModel):
 
 
 class ReviewProduce(BaseOrjsonModel):
-    topic: str = 'ugc.reviews'
+    topic: str = 'ugcReviews'
     value: ReviewValue
 
 
@@ -73,5 +73,5 @@ class BookmarksValue(BaseTimestampModel):
 
 
 class BookmarksProduce(BaseOrjsonModel):
-    topic: str = 'ugc.bookmarks'
+    topic: str = 'ugcBookmarks'
     value: BookmarksValue
