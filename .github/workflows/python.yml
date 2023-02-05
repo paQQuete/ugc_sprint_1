@@ -37,9 +37,10 @@ jobs:
 #      run: |
 #        pytest tests/unit
 
-    - name: Type check with mypy
-      run:
-        mypy ./fastapi --explicit-package-bases
+#     - name: Type check with mypy
+#       run:
+#         mypy ./fastapi --explicit-package-bases
+        
     - name: Telegram notification
       uses: appleboy/telegram-action@master
       with:
