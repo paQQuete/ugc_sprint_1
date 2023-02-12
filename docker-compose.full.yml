@@ -12,6 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - clickhouse-network
+    mem_limit: 256m
   broker:
     image: confluentinc/cp-server:6.0.1
     hostname: broker
@@ -24,6 +25,7 @@ services:
       - "29092:29092"
     networks:
       - clickhouse-network
+    mem_limit: 400m
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-kafka:2181'
@@ -58,6 +60,7 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    mem_limit: 256m
 
   connect:
     image: confluentinc/cp-kafka-connect:6.0.1
@@ -97,6 +100,7 @@ services:
     command: "bash -c 'if [ ! -d /usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen ]; then echo \"WARNING: Did not find directory for kafka-connect-datagen (did you remember to run: docker-compose up -d --build ?)\"; fi ; /etc/confluent/docker/run'"
     volumes:
       - ./mongodb/kafka-connect:/usr/share/confluent-hub-components/kafka-connect-mongodb
+    mem_limit: 256m
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:6.0.1
@@ -122,6 +126,7 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+    mem_limit: 512m
 
   ksqldb-server:
     image: confluentinc/cp-ksqldb-server:6.0.1
@@ -147,6 +152,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    mem_limit: 256m
 
   ksqldb-cli:
     image: confluentinc/cp-ksqldb-cli:6.0.1
@@ -159,6 +165,7 @@ services:
     tty: true
     networks:
       - clickhouse-network
+    mem_limit: 256m
 
   ksql-datagen:
     image: confluentinc/ksqldb-examples:6.0.1
@@ -178,6 +185,7 @@ services:
                        tail -f /dev/null'"
     networks:
       - clickhouse-network
+    mem_limit: 256m
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       STREAMS_BOOTSTRAP_SERVERS: broker:29092
@@ -195,6 +203,7 @@ services:
       - clickhouse-network
     hostname: rest-proxy
     container_name: rest-proxy
+    mem_limit: 256m
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
@@ -206,6 +215,7 @@ services:
     hostname: zookeeper
     networks:
       - clickhouse-network
+    mem_limit: 256m
 
   clickhouse-node1:
     image: yandex/clickhouse-server:latest
@@ -220,6 +230,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   clickhouse-node2:
     image: yandex/clickhouse-server:latest
@@ -231,6 +242,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   clickhouse-node3:
     image: yandex/clickhouse-server:latest
@@ -242,6 +254,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   clickhouse-node4:
     image: yandex/clickhouse-server:latest
@@ -253,19 +266,22 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
-  fastapi:
-      build: ./fastapi
-      container_name: ugc_service
-      hostname: ugc
-      depends_on:
-        - zookeeper-kafka
-        - zookeeper
-      env_file:
-        - .env
-      ports:
-        - "8000:8000"
-      networks:
-        - clickhouse-network
+    mem_limit: 128m
+
+#  fastapi:
+#      build: ./fastapi
+#      container_name: ugc_service
+#      hostname: ugc
+#      depends_on:
+#        - zookeeper-kafka
+#        - zookeeper
+#      env_file:
+#        - .env
+#      ports:
+#        - "8000:8000"
+#      networks:
+#        - clickhouse-network
+#      mem_limit: 512m
 
   mongors1n1:
     container_name: mongors1n1
@@ -278,6 +294,7 @@ services:
       - /tmp/mongo_cluster/data1:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongors1n2:
     container_name: mongors1n2
@@ -290,6 +307,7 @@ services:
       - /tmp/mongo_cluster/data2:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongors1n3:
     container_name: mongors1n3
@@ -302,6 +320,7 @@ services:
       - /tmp/mongo_cluster/data3:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongors2n1:
     container_name: mongors2n1
@@ -314,6 +333,7 @@ services:
       - /tmp/mongo_cluster/data4:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongors2n2:
     container_name: mongors2n2
@@ -326,6 +346,7 @@ services:
       - /tmp/mongo_cluster/data5:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongors2n3:
     container_name: mongors2n3
@@ -338,6 +359,7 @@ services:
       - /tmp/mongo_cluster/data6:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongocfg1:
     container_name: mongocfg1
@@ -350,6 +372,7 @@ services:
       - /tmp/mongo_cluster/config1:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongocfg2:
     container_name: mongocfg2
@@ -362,6 +385,7 @@ services:
       - /tmp/mongo_cluster/config2:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
   mongocfg3:
     container_name: mongocfg3
@@ -374,6 +398,7 @@ services:
       - /tmp/mongo_cluster/config3:/data/db
     networks:
       - clickhouse-network
+    mem_limit: 128m
 
 
   mongos1:
@@ -389,6 +414,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - clickhouse-network
+    mem_limit: 256m
 
   mongos2:
     container_name: mongos2
@@ -403,6 +429,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - clickhouse-network
+    mem_limit: 256m
 
   testing_c:
       image: praqma/network-multitool:latest
@@ -414,6 +441,7 @@ services:
         - "60000:60000"
       networks:
         - clickhouse-network
+      mem_limit: 128m
 
   jupyter:
     image: python:slim
@@ -423,6 +451,82 @@ services:
       - "8888:8888"
     volumes:
       - ./db_research/volume:/home/user
+    mem_limit: 512m
+
+  nginx:
+    image: nginx:1.19.2
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+#    depends_on:
+#      - fastapi
+    ports:
+      - "8080:80"
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://127.0.0.1:5044
+        tag: nginx
+    networks:
+      - clickhouse-network
+    mem_limit: 128m
+
+  logstash:
+    image: logstash:7.10.1
+    environment:
+      # Так как сейчас вы хотите запустить logstash без Elasticsearch, необходимо отключить встроенный мониторинг, отправляющий данные в ES
+      XPACK_MONITORING_ENABLED: "false"
+      ES_HOST: "elasticsearch:9200"
+    ports:
+      - "5044:5044/udp"
+    volumes:
+      # Монтируем файл с конфигурацией logstash
+      - ./logstash/logstash.conf:/config/logstash.conf:ro
+    # Запускаем с указанием конфигурационного файла
+    command: logstash -f /config/logstash.conf
+    networks:
+      - clickhouse-network
+    mem_limit: 256m
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    environment:
+      # Указываем ES запуститься в одном экземпляре
+      discovery.type: single-node
+    ports:
+      - "9200:9200"
+    volumes:
+      - /tmp/esdata:/tmp/elasticsearch/data
+  # Обратите внимание: не стоит использовать для ELK тот же ES, который задействован для полнотекстового поиска в вашем сервисе
+    networks:
+      - clickhouse-network
+    mem_limit: 256m
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.2
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - clickhouse-network
+    mem_limit: 512m
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.3.2
+    volumes:
+      - /tmp/logs/nginx:/var/log/nginx:ro
+      - ./beat/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:rw
+    depends_on:
+      - nginx
+      - logstash
+      - elasticsearch
+      - kibana
+    links:
+      - logstash
+    networks:
+      - clickhouse-network
+    mem_limit: 256m
 
 networks:
   clickhouse-network:

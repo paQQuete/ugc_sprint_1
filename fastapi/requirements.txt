@@ -8,3 +8,4 @@ python-dotenv==0.21.1
 aiokafka==0.8.0
 clickhouse-driver==0.2.5
 mypy==0.991
+sentry-sdk[fastapi]==1.15.0
