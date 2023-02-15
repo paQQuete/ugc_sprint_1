@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-env_path = Path('.') / '.env'
+env_path = Path('.') / '.env.local'
 load_dotenv(dotenv_path=env_path)
 
 client = Client(host=os.getenv('CLICKHOUSE_HOST'))

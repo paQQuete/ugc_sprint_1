@@ -2,7 +2,7 @@
 fetchstatus() {
         HEAD http://localhost:8000 | grep '404\ Not Found' | wc -l
 }
-#export $(grep -v '^#' .env | xargs)
+#export $(grep -v '^#' .env.local | xargs)
 
 #up all services
 docker compose -f docker-compose.full.yml up -d --build
