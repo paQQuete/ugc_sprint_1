@@ -12,6 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - clickhouse-network
+    restart: always
   broker:
     image: confluentinc/cp-server:6.0.1
     hostname: broker
@@ -24,6 +25,7 @@ services:
       - "29092:29092"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-kafka:2181'
@@ -54,6 +56,7 @@ services:
       - "8081"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'ctube-study.ru:29092'
@@ -70,6 +73,7 @@ services:
       - "8083:8083"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'ctube-study.ru:29092'
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
@@ -111,6 +115,7 @@ services:
       - "9021:9021"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'ctube-study.ru:29092'
       CONTROL_CENTER_CONNECT_CLUSTER: 'connect:8083'
@@ -134,6 +139,7 @@ services:
       - "8088"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       KSQL_BOOTSTRAP_SERVERS: "ctube-study.ru:29092"
@@ -159,6 +165,7 @@ services:
     tty: true
     networks:
       - clickhouse-network
+    restart: always
 
   ksql-datagen:
     image: confluentinc/ksqldb-examples:6.0.1
@@ -178,6 +185,7 @@ services:
                        tail -f /dev/null'"
     networks:
       - clickhouse-network
+    restart: always
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       STREAMS_BOOTSTRAP_SERVERS: ctube-study.ru:29092
@@ -193,6 +201,7 @@ services:
       - "8082"
     networks:
       - clickhouse-network
+    restart: always
     hostname: rest-proxy
     container_name: rest-proxy
     environment:
@@ -206,6 +215,7 @@ services:
     hostname: zookeeper
     networks:
       - clickhouse-network
+    restart: always
 
   clickhouse-node1:
     image: yandex/clickhouse-server:latest
@@ -220,6 +230,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    restart: always
 
   clickhouse-node2:
     image: yandex/clickhouse-server:latest
@@ -231,6 +242,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    restart: always
 
   clickhouse-node3:
     image: yandex/clickhouse-server:latest
@@ -242,6 +254,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    restart: always
 
   clickhouse-node4:
     image: yandex/clickhouse-server:latest
@@ -253,6 +266,7 @@ services:
       - zookeeper
     networks:
       - clickhouse-network
+    restart: always
 
   mongors1n1:
     container_name: mongors1n1
@@ -265,6 +279,7 @@ services:
       - /tmp/mongo_cluster/data1:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongors1n2:
     container_name: mongors1n2
@@ -277,6 +292,7 @@ services:
       - /tmp/mongo_cluster/data2:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongors1n3:
     container_name: mongors1n3
@@ -289,6 +305,7 @@ services:
       - /tmp/mongo_cluster/data3:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongors2n1:
     container_name: mongors2n1
@@ -301,6 +318,7 @@ services:
       - /tmp/mongo_cluster/data4:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongors2n2:
     container_name: mongors2n2
@@ -313,6 +331,7 @@ services:
       - /tmp/mongo_cluster/data5:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongors2n3:
     container_name: mongors2n3
@@ -325,6 +344,7 @@ services:
       - /tmp/mongo_cluster/data6:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongocfg1:
     container_name: mongocfg1
@@ -337,6 +357,7 @@ services:
       - /tmp/mongo_cluster/config1:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongocfg2:
     container_name: mongocfg2
@@ -349,6 +370,7 @@ services:
       - /tmp/mongo_cluster/config2:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
   mongocfg3:
     container_name: mongocfg3
@@ -361,6 +383,7 @@ services:
       - /tmp/mongo_cluster/config3:/data/db
     networks:
       - clickhouse-network
+    restart: always
 
 
   mongos1:
@@ -376,6 +399,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - clickhouse-network
+    restart: always
 
   mongos2:
     container_name: mongos2
@@ -390,6 +414,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - clickhouse-network
+    restart: always
 
   jupyter:
     image: python:slim
@@ -399,6 +424,7 @@ services:
       - "8888:8888"
     volumes:
       - ./db_research/volume:/home/user
+    restart: always
 
   nginx:
     image: nginx:1.19.2
@@ -432,6 +458,7 @@ services:
     command: logstash -f /config/logstash.conf
     networks:
       - clickhouse-network
+    restart: always
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
@@ -445,6 +472,7 @@ services:
   # Обратите внимание: не стоит использовать для ELK тот же ES, который задействован для полнотекстового поиска в вашем сервисе
     networks:
       - clickhouse-network
+    restart: always
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.10.2
@@ -454,6 +482,7 @@ services:
       - elasticsearch
     networks:
       - clickhouse-network
+    restart: always
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.3.2
@@ -469,6 +498,7 @@ services:
       - logstash
     networks:
       - clickhouse-network
+    restart: always
 
 networks:
   clickhouse-network:
