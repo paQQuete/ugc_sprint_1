@@ -494,11 +494,26 @@ services:
       - logstash
       - elasticsearch
       - kibana
+      - fastapi
     links:
       - logstash
     networks:
       - clickhouse-network
     restart: always
+
+  fastapi:
+    build: ./fastapi
+    container_name: ugc_service
+    hostname: ugc
+    depends_on:
+      - zookeeper-kafka
+      - zookeeper
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - clickhouse-network
 
 networks:
   clickhouse-network:
