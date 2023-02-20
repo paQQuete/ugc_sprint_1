@@ -8,6 +8,8 @@ echo "Waiting for Kafka broker..."
     done
     echo "Kafka Broker started"
 
+sleep 120
+
 echo "Waiting for MongoDB..."
     while ! nc -z "$MONGO_HOST" "$MONGO_PORT"; do
       sleep 0.5
