@@ -40,6 +40,7 @@ sleep 1
 
 #initialized database tables and engines
 pip install clickhouse-driver
+pip install python-dotenv
 python3 clickhouse/initial.py
 python3 etl/clickhouse.py
 mongodb/config/initial_db.sh
