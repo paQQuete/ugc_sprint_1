@@ -419,7 +419,7 @@ services:
   jupyter:
     image: python:slim
     container_name: jupyter
-    command: bash -c "pip install jupyter clickhouse-driver vertica-python pymongo mimesis && jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root"
+    command: bash -c "pip install jupyter clickhouse-driver vertica-python pymongo mimesis requests && jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root"
     ports:
       - "8888:8888"
     volumes:
