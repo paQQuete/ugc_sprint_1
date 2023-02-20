@@ -39,7 +39,7 @@ docker exec zookeeper-kafka \
 sleep 1
 
 #initialized database tables and engines
-python3 clickhouse/initial.py
 pip install clickhouse-driver
+python3 clickhouse/initial.py
 python3 etl/clickhouse.py
 mongodb/config/initial_db.sh
