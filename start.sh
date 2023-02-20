@@ -40,4 +40,5 @@ sleep 1
 
 #initialized database tables and engines
 python3 clickhouse/initial.py
+pip install clickhouse-driver
 python3 etl/clickhouse.py

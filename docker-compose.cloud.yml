@@ -521,12 +521,8 @@ services:
     depends_on:
       - broker
       - mongos1
-    environment:
-      KAFKA_HOST: broker
-      KAFKA_PORT: 29092
-      MONGO_HOST: mongos1
-      MONGO_PORT: 27019
-      TOPICS: '["ugcViews","ugcMovie_likes","ugcReview_likes","ugcReviews","ugcBookmarks"]'
+    env_file:
+      - .env
     restart: always
     networks:
       - clickhouse-network
