@@ -5,7 +5,7 @@ fetchstatus() {
 #export $(grep -v '^#' .env.local | xargs)
 
 #up all services
-docker compose -f docker-compose.full.yml up -d --build
+docker compose -f docker-compose.cloud.yml up -d --build
 
 #wait for services alive
 status=$(fetchstatus)
@@ -40,4 +40,6 @@ sleep 1
 
 #initialized database tables and engines
 python3 clickhouse/initial.py
+pip install clickhouse-driver
 python3 etl/clickhouse.py
+mongodb/config/initial_db.sh
