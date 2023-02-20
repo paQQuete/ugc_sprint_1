@@ -521,8 +521,6 @@ services:
     depends_on:
       - broker
       - mongos1
-    env_file:
-      - .env
     restart: always
     networks:
       - clickhouse-network
