@@ -518,9 +518,6 @@ services:
   etl:
     image: paqquete/kafka-mongo-etl:v1
     container_name: etl
-    depends_on:
-      - broker
-      - mongos1
     restart: always
     networks:
       - clickhouse-network
