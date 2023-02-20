@@ -425,6 +425,8 @@ services:
     volumes:
       - ./db_research/volume:/home/user
     restart: always
+    networks:
+      - clickhouse-network
 
   nginx:
     image: nginx:1.19.2
