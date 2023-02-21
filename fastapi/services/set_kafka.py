@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka import AIOKafkaProducer
 from fastapi import Depends
 
 from db.kafka import get_producer

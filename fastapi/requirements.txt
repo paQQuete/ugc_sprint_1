@@ -9,3 +9,4 @@ aiokafka==0.8.0
 clickhouse-driver==0.2.5
 mypy==0.991
 sentry-sdk[fastapi]==1.15.0
+motor==3.1.1
