@@ -1,10 +1,12 @@
 import uuid
+from typing import List
 
 from fastapi import APIRouter, Depends
 
 from models.model import ViewProduce, ViewValue
 from services.set_kafka import KafkaService, get_kafka_service
 from services.mongo import views
+
 
 router = APIRouter()
 
@@ -22,6 +24,11 @@ async def set_view(view: ViewProduce, view_service: KafkaService = Depends(get_k
 @router.get('/{user_id}/{film_id}', response_model=ViewValue)
 async def get_view(user_id: int, film_id: uuid.UUID):
     return await views.get_view(user_id=user_id, film_id=film_id)
+
+
+@router.get('/{user_id}', response_model=List[ViewValue])
+async def get_list_views(user_id: int):
+    return await views.get_view_list(user_id=user_id)
 
 
 @router.delete('/{user_id}/{film_id}', status_code=200)

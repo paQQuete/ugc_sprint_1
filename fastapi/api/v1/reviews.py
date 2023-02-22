@@ -34,23 +34,23 @@ async def get_review_list(
 
 
 
-@router.get("/{user_id}/{review_id}", response_model=ReviewValue, description="Получить рецензию")
+@router.get("/{user_id}/{review_uuid}", response_model=ReviewValue, description="Получить рецензию")
 async def get_review(
     user_id: int,
-    review_id: uuid.UUID
+    review_uuid: uuid.UUID
 ) -> Any:
     """
     Получить рецензию
     """
-    return await reviews.get_review(user_id=user_id, review_id=review_id)
+    return await reviews.get_review(user_id=user_id, review_id=review_uuid)
 
 
-@router.delete("/{user_id}/{review_id}", status_code=200, description="Удалить рецензию")
+@router.delete("/{user_id}/{review_uuid}", status_code=200, description="Удалить рецензию")
 async def delete_review(
     user_id: int,
-    review_id: uuid.UUID,
+    review_uuid: uuid.UUID,
 ) -> Any:
     """
     Удалить рецензию
     """
-    return await reviews.remove_review(user_id=user_id, review_id=review_id)
+    return await reviews.remove_review(user_id=user_id, review_id=review_uuid)

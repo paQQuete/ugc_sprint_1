@@ -56,6 +56,7 @@ class ReviewLikesProduce(BaseOrjsonModel):
 
 
 class ReviewValue(BaseTimestampModel):
+    review_uuid: uuid.UUID
     user_id: int
     movie_uuid: uuid.UUID
     title: str
