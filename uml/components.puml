@@ -74,18 +74,23 @@ package "Auth" {
 
 package "UGC" {
     [FastAPI'] #Yellow
+    [ETL'] #Yellow
     database "Kafka" {
-        [views]
+        [topics]
     }
     database "Clickhouse"
-
+    database "MongoDB"
     :Analyst: --> "Clickhouse"
 
 
-    [FastAPI'] ..> [views] : Produce
-    "Clickhouse" <.. [views] : Consume
-
-
+    [FastAPI'] ..> [topics] : Produce (set)
+    "Clickhouse" <.. [topics] : Consume (get)
+    "ETL'" <.. [topics] : Consume (get)
+    "MongoDB" <.. "ETL'"
+    [FastAPI'] <--> "MongoDB" : get, delete
+    note right of [ETL']
+    persistent
+    end note
 }
 
 [Nginx'] - [FastAPI]
