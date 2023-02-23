@@ -18,3 +18,5 @@ class KafkaConsume:
     def commit(self):
         self.consumer.commit()
 
+    def close(self):
+        self.consumer.close()

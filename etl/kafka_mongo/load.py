@@ -20,6 +20,9 @@ class MongoLoad:
     def _insert_one(self):
         return self._db_collection.insert_one(self._data)
 
+    def close(self):
+        self._client.close()
+
     @property
     def inserted_one(self):
         return self._inserted_one_resp.inserted_id
