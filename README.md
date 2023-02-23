@@ -6,8 +6,9 @@
 Запуск проекта (Kafka, Clickhouse, FastAPI, MongoDB, ETL (Kafka - MongoDB, Kafka - Clickhouse), Jupyter, ELK)
 
 ```shell
-./start.sh
+nohup ./start.sh > start.log 2>&1 &
 ```
+*(запуск стартового скрипта без привязки к терминалу и запись stdout в файл)*
 
 После запуска станут доступны эндпоинты API для добавления сообщений в топики Kafka
 *[документация](http://127.0.0.1:8000/api/openapi)*
