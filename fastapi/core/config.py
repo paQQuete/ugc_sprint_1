@@ -1,34 +1,43 @@
-import json
 import os
 from logging import config as logging_config
-from dotenv import load_dotenv
-from pydantic import BaseSettings
 
+from dotenv import load_dotenv
+from pydantic import BaseSettings, AnyUrl
 from core.logger import LOGGING
 
 
-load_dotenv()
+DEBUG = True
+if DEBUG:
+    load_dotenv()
+
 logging_config.dictConfig(LOGGING)
 
 
+class KafkaDSN(BaseSettings):
+    KAFKA_HOST: str
+    KAFKA_PORT: int
+
+    class Config:
+        env_file = '.env'
+
+
 class Settings(BaseSettings):
-    PROJECT_NAME = os.getenv('PROJECT_NAME')
-    KAFKA_HOST = os.getenv('KAFKABROKER_HOST')
-    KAFKA_PORT = int(os.getenv('KAFKABROKER_PORT'))
-    KAFKA_SERVER = f'{KAFKA_HOST}:{KAFKA_PORT}'
-    MONGO_HOST = os.getenv('MONGO_HOST')
-    MONGO_PORT = int(os.getenv('MONGO_PORT'))
-    MONGO_DB = os.getenv('MONGO_DB')
-    DEFAULT_LIMIT = 10
-    DEFAULT_OFFSET = 0
+    PROJECT_NAME: str
+    KAFKA: KafkaDSN = KafkaDSN()
+    KAFKA_SERVER: str = f'{KAFKA.KAFKA_HOST}:{KAFKA.KAFKA_PORT}'
+    MONGO_HOST: str
+    MONGO_PORT: int
+    MONGO_DB: str
+    DEFAULT_LIMIT: int = 10
+    DEFAULT_OFFSET: int = 0
 
-    TOPICS = json.loads(os.getenv('TOPICS'))
-    COL_VIEWS = [x for x in TOPICS if 'Views' in x][0]
-    COL_MOVIE_LIKES = [x for x in TOPICS if 'Movie_likes' in x][0]
-    COL_REVIEW_LIKES = [x for x in TOPICS if 'Review_likes' in x][0]
-    COL_REVIEWS = [x for x in TOPICS if 'Reviews' in x][0]
-    COL_BOOKMARKS = [x for x in TOPICS if 'Bookmarks' in x][0]
+    COL_VIEWS: str
+    COL_MOVIE_LIKES: str
+    COL_REVIEW_LIKES: str
+    COL_REVIEWS: str
+    COL_BOOKMARKS: str
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+    class Config:
+        env_file = '.env'
