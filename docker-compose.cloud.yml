@@ -13,6 +13,12 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "zookeeper-kafka"
+
   broker:
     image: confluentinc/cp-server:6.0.1
     hostname: broker
@@ -45,6 +51,11 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "broker"
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.0.1
@@ -61,6 +72,11 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'ctube-study.ru:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "schema-registry"
 
   connect:
     image: confluentinc/cp-kafka-connect:6.0.1
@@ -101,6 +117,11 @@ services:
     command: "bash -c 'if [ ! -d /usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen ]; then echo \"WARNING: Did not find directory for kafka-connect-datagen (did you remember to run: docker-compose up -d --build ?)\"; fi ; /etc/confluent/docker/run'"
     volumes:
       - ./mongodb/kafka-connect:/usr/share/confluent-hub-components/kafka-connect-mongodb
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "connect"
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:6.0.1
@@ -127,6 +148,11 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "control-center"
 
   ksqldb-server:
     image: confluentinc/cp-ksqldb-server:6.0.1
@@ -153,6 +179,11 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "ksqldb-server"
 
   ksqldb-cli:
     image: confluentinc/cp-ksqldb-cli:6.0.1
@@ -166,6 +197,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "ksqldb-cli"
 
   ksql-datagen:
     image: confluentinc/ksqldb-examples:6.0.1
@@ -191,6 +227,11 @@ services:
       STREAMS_BOOTSTRAP_SERVERS: ctube-study.ru:29092
       STREAMS_SCHEMA_REGISTRY_HOST: schema-registry
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "ksql-datagen"
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest:6.0.1
@@ -209,6 +250,12 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'ctube-study.ru:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "rest-proxy"
+      
   zookeeper:
     image: zookeeper:3.5
     container_name: zookeeper
@@ -216,6 +263,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "zookeeper"
 
   clickhouse-node1:
     image: yandex/clickhouse-server:latest
@@ -231,6 +283,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "clickhouse-node1"
 
   clickhouse-node2:
     image: yandex/clickhouse-server:latest
@@ -243,6 +300,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "clickhouse-node2"
 
   clickhouse-node3:
     image: yandex/clickhouse-server:latest
@@ -255,6 +317,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "clickhouse-node3"
 
   clickhouse-node4:
     image: yandex/clickhouse-server:latest
@@ -267,6 +334,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "clickhouse-node4"
 
   mongors1n1:
     container_name: mongors1n1
@@ -280,6 +352,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors1n1"
 
   mongors1n2:
     container_name: mongors1n2
@@ -293,6 +370,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors1n2"
 
   mongors1n3:
     container_name: mongors1n3
@@ -306,6 +388,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors1n3"
 
   mongors2n1:
     container_name: mongors2n1
@@ -319,6 +406,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors2n1"
 
   mongors2n2:
     container_name: mongors2n2
@@ -332,6 +424,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors2n2"
 
   mongors2n3:
     container_name: mongors2n3
@@ -345,6 +442,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongors2n3"
 
   mongocfg1:
     container_name: mongocfg1
@@ -358,6 +460,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongocfg1"
 
   mongocfg2:
     container_name: mongocfg2
@@ -371,6 +478,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongocfg2"
 
   mongocfg3:
     container_name: mongocfg3
@@ -384,7 +496,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
-
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongocfg3"
 
   mongos1:
     container_name: mongos1
@@ -400,6 +516,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongos1"
 
   mongos2:
     container_name: mongos2
@@ -415,6 +536,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "mongos2"
 
   jupyter:
     image: python:slim
@@ -427,6 +553,11 @@ services:
     restart: always
     networks:
       - clickhouse-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "jupyter"
 
   nginx:
     image: nginx:1.19.2
@@ -437,13 +568,13 @@ services:
       - fastapi
     ports:
       - "8080:80"
+    networks:
+        - clickhouse-network
     logging:
       driver: gelf
       options:
-        gelf-address: udp://127.0.0.1:5044
-        tag: nginx
-    networks:
-      - clickhouse-network
+        gelf-address: "udp://localhost:12201"
+        tag: "nginx"
 
   logstash:
     image: logstash:7.10.1
@@ -460,6 +591,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "logstash"
 
 
   elasticsearch:
@@ -473,6 +609,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "elasticsearch"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.10.2
@@ -484,6 +625,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "kibana"
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.3.2
@@ -501,6 +647,11 @@ services:
     networks:
       - clickhouse-network
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "filebeat"
 
   fastapi:
     build: ./fastapi
@@ -527,6 +678,11 @@ services:
     restart: always
     networks:
       - clickhouse-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+        tag: "etl"
 
 networks:
   clickhouse-network:
