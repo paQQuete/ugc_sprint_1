@@ -5,8 +5,7 @@ WORKDIR /opt/fastapi/src
 COPY requirements.txt ./requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-RUN apt -y update \
-    && apt -y install netcat
+RUN apt -y update && apt -y install netcat && apt -y install kafkacat
 
 EXPOSE 8000
 COPY . ./
