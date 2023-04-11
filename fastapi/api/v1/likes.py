@@ -31,7 +31,7 @@ async def set_review_like(view: ReviewLikesProduce, kafka_service: KafkaService 
     return ReviewLikesProduce(topic=view.topic, value=view.value)
 
 
-@router.post('/genre', response_model=)
+@router.post('/genre', response_model=GenreLikesProduce)
 async def set_genre_like(view: GenreLikesProduce, kafka_service: KafkaService = Depends(get_kafka_service)):
     await kafka_service.set(
         topic=view.topic,
