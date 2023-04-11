@@ -6,7 +6,7 @@ from fastapi import HTTPException
 
 from core.config import Settings
 from db.mongo import Mongo
-from models.model import ReviewLikesValue, MovieLikesValue
+from models.model import ReviewLikesValue, MovieLikesValue, GenreLikesValue
 
 mongo = Mongo()
 
@@ -37,6 +37,18 @@ async def get_reviews_likes_list(
     return [ReviewLikesValue(**item) async for item in data]
 
 
+async def get_genre_likes_list(
+        user_id: int,
+        limit: int = settings.DEFAULT_LIMIT,
+        offset: int = settings.DEFAULT_OFFSET,
+) -> List[GenreLikesValue]:
+    """Получить список лайков жанров одного пользователя"""
+    data = await mongo.find(
+        settings.COL_GENRE_LIKES, {"user_id": user_id}, limit=limit, offset=offset
+    )
+    return [GenreLikesValue(**item) async for item in data]
+
+
 async def get_movie_like(user_id: int, film_id: uuid.UUID) -> Optional[MovieLikesValue]:
     """Получить один лайк"""
     data = await mongo.find_one(
@@ -55,6 +67,16 @@ async def get_review_like(user_id: int, review_id: uuid.UUID) -> Optional[Review
     if not data:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return ReviewLikesValue(**data)
+
+
+async def get_genre_like(user_id: int, genre_id: uuid.UUID) -> Optional[GenreLikesValue]:
+    """Получить один лайк жанра"""
+    data = await mongo.find_one(
+        settings.COL_GENRE_LIKES, {"user_id": user_id, "genre_uuid": genre_id}
+    )
+    if not data:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
+    return GenreLikesValue(**data)
 
 
 async def remove_movie_like(user_id: int, film_id: uuid.UUID) -> None:
@@ -80,4 +102,17 @@ async def remove_review_like(user_id: int, review_id: uuid.UUID) -> None:
 
     await mongo.delete(
         settings.COL_REVIEW_LIKES, {"user_id": user_id, "movie_uuid": review_id}
+    )
+
+
+async def remove_genre_like(user_id: int, genre_id: uuid.UUID) -> None:
+    """Удалить лайк жанра"""
+    data = await mongo.find_one(
+        settings.COL_GENRE_LIKES, {"user_id": user_id, "genre_uuid": genre_id}
+    )
+    if not data:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
+
+    await mongo.delete(
+        settings.COL_GENRE_LIKES, {"user_id": user_id, "genre_uuid": genre_id}
     )

@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     COL_REVIEW_LIKES: str
     COL_REVIEWS: str
     COL_BOOKMARKS: str
+    COL_GENRE_LIKES: str
 
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

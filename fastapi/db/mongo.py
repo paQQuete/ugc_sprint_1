@@ -4,7 +4,6 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, Asyn
 
 from core.config import Settings
 
-
 settings = Settings()
 
 
@@ -27,40 +26,39 @@ class Mongo:
                 data[key] = str(value)
         return data
 
-
     async def find(
-        self,
-        collection_name: str,
-        condition: dict,
-        limit: int = settings.DEFAULT_LIMIT,
-        offset: int = settings.DEFAULT_OFFSET,
+            self,
+            collection_name: str,
+            condition: dict,
+            limit: int = settings.DEFAULT_LIMIT,
+            offset: int = settings.DEFAULT_OFFSET,
     ) -> AsyncIOMotorCursor:
         """Read data from mongoDB."""
         collection = self._get_collection(collection_name)
         return collection.find(self._patch_uuid(condition)).skip(offset).limit(limit)
 
     async def insert(
-        self,
-        collection_name: str,
-        data: dict,
+            self,
+            collection_name: str,
+            data: dict,
     ) -> None:
         """Insert data in mongoDB."""
         collection = self._get_collection(collection_name)
         await collection.insert_one(data)
 
     async def find_one(
-        self,
-        collection_name: str,
-        condition: dict,
+            self,
+            collection_name: str,
+            condition: dict,
     ) -> dict:
         """Read item from mongoDB."""
         collection = self._get_collection(collection_name)
         return await collection.find_one(self._patch_uuid(condition))
 
     async def delete(
-        self,
-        collection_name: str,
-        condition: dict,
+            self,
+            collection_name: str,
+            condition: dict,
     ) -> None:
         """Delete from mongoDB."""
         collection = self._get_collection(collection_name)

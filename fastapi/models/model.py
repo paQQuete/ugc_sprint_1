@@ -30,6 +30,7 @@ class ViewValue(BaseOrjsonModel):
     event_timestamp: int
     movie_id: uuid.UUID
     user_id: int
+    genre_uuid: uuid.UUID
 
 
 class ViewProduce(BaseOrjsonModel):
@@ -39,6 +40,7 @@ class ViewProduce(BaseOrjsonModel):
 
 class MovieLikesValue(BaseLikesModel):
     movie_uuid: uuid.UUID
+    genre_uuid: uuid.UUID
 
 
 class MovieLikesProduce(BaseOrjsonModel):
@@ -53,6 +55,15 @@ class ReviewLikesValue(BaseLikesModel):
 class ReviewLikesProduce(BaseOrjsonModel):
     topic: str = 'ugcReview_likes'
     value: ReviewLikesValue
+
+
+class GenreLikesValue(BaseOrjsonModel):
+    genre_uuid: uuid.UUID
+
+
+class GenreLikesProduce(BaseOrjsonModel):
+    topic: str = 'ugcGenre_likes'
+    value: GenreLikesValue
 
 
 class ReviewValue(BaseTimestampModel):
