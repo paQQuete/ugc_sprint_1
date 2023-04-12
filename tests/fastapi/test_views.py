@@ -4,7 +4,7 @@ import requests
 
 
 def test_set_view(dataset):
-    r = requests.post(f'{dataset["BASE_URL"]}/api/v1/views/', json={
+    r = requests.post(f'{dataset["BASE_URL"]}/api/v1/views', json={
         "value": {
             "movie_timestamp": dataset['RELATIVE_TIME'],
             "event_timestamp": dataset['ABSOLUTE_TIME'],
@@ -26,7 +26,7 @@ def test_set_view(dataset):
 
 
 def test_get_view(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/views/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/views', json={
         "value": {
             "movie_timestamp": dataset['RELATIVE_TIME'],
             "event_timestamp": dataset['ABSOLUTE_TIME'],
@@ -46,7 +46,7 @@ def test_get_view(dataset):
 
 
 def test_get_list_views(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/views/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/views', json={
         "value": {
             "movie_timestamp": dataset['RELATIVE_TIME'],
             "event_timestamp": dataset['ABSOLUTE_TIME'],
@@ -61,7 +61,7 @@ def test_get_list_views(dataset):
 
 
 def test_delete_view(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/views/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/views', json={
         "value": {
             "movie_timestamp": dataset['RELATIVE_TIME'],
             "event_timestamp": dataset['ABSOLUTE_TIME'],

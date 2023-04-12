@@ -48,3 +48,5 @@ pip install python-dotenv
 python3 clickhouse/initial.py
 python3 etl/clickhouse.py
 mongodb/config/initial_db.sh
+sleep 3
+mongodb/config/initial_db.sh

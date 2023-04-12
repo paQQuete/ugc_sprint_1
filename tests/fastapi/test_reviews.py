@@ -4,7 +4,7 @@ import requests
 
 
 def test_review_set(dataset):
-    r = requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews/', json={
+    r = requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -35,7 +35,7 @@ def test_review_set(dataset):
 
 
 def test_review_list(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -54,7 +54,7 @@ def test_review_list(dataset):
 
 
 def test_review_get(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -83,7 +83,7 @@ def test_review_get(dataset):
 
 
 def test_review_delete(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/reviews', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],

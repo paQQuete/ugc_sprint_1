@@ -35,7 +35,7 @@ async def set_review_like(view: ReviewLikesProduce, kafka_service: KafkaService 
 async def set_genre_like(view: GenreLikesProduce, kafka_service: KafkaService = Depends(get_kafka_service)):
     await kafka_service.set(
         topic=view.topic,
-        key=str(view.value.review_uuid).encode('UTF-8'),
+        key=str(view.value.genre_uuid).encode('UTF-8'),
         value=view.value.json().encode('UTF-8')
     )
     return GenreLikesProduce(topic=view.topic, value=view.value)
