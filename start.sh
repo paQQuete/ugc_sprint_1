@@ -38,9 +38,15 @@ docker exec zookeeper-kafka \
   kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcBookmarks
 sleep 1
 
+docker exec zookeeper-kafka \
+  kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --if-not-exists --topic ugcGenre_likes
+sleep 1
+
 #initialized database tables and engines
 pip install clickhouse-driver
 pip install python-dotenv
 python3 clickhouse/initial.py
 python3 etl/clickhouse.py
+mongodb/config/initial_db.sh
+sleep 3
 mongodb/config/initial_db.sh

@@ -4,7 +4,7 @@ import requests
 
 
 def test_set(dataset):
-    r = requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks/', json={
+    r = requests.post(f'http://ctube-study.ru:8080/api/v1/bookmarks', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -27,7 +27,7 @@ def test_set(dataset):
 
 
 def test_get_list(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -42,7 +42,7 @@ def test_get_list(dataset):
 
 
 def test_get_bookmark(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
@@ -58,7 +58,7 @@ def test_get_bookmark(dataset):
 
 
 def test_del_bookmark(dataset):
-    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks/', json={
+    requests.post(f'{dataset["BASE_URL"]}/api/v1/bookmarks', json={
         "value": {
             "created_at": dataset['ABSOLUTE_TIME'],
             "updated_at": dataset['ABSOLUTE_TIME'],
