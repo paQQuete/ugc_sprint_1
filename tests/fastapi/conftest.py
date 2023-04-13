@@ -25,7 +25,7 @@ def dataset():
         'GENRE_UUID': uuid.uuid4(),
         'ABSOLUTE_TIME': random.randint(633801229, 1675180434),
         'RELATIVE_TIME': random.randint(1, 86400),
-        'BASE_URL': 'http://ctube-study.ru:8000',
+        'BASE_URL': 'http://ctube-study.ru:8080',
         'RATING': random.randint(0, 10),
         'REVIEW_TITLE': _randstr(20),
         'REVIEW_TEXT': _randstr(150)
